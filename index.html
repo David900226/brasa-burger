@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brasa Burger — La burger más brutal de Bogotá</title>
+  <meta name="description" content="Hamburguesas premium a la brasa en Bogotá. Carne jugosa, pan artesanal y salsas de la casa. Pide ahora por WhatsApp." />
+  <style>
+    /* ══════════════════════════════════════════════════════
+       RESET & BASE
+       ══════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #0c0a07;
+      overflow-x: hidden;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-weight: 900;
+      color: #fdf4e7;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    h1 { font-size: clamp(2.4rem, 6vw, 5rem); letter-spacing: -0.045em; }
+    h2 { font-size: clamp(1.9rem, 4.5vw, 3.2rem); }
+    h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
+    p  { margin: 0; line-height: 1.65; color: #b89a7a; }
+    a  { text-decoration: none; color: inherit; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Design tokens ──────────────────────────────────── */
+    :root {
+      --black:   #0c0a07;
+      --coal:    #151209;
+      --surface: #1e1812;
+      --card:    rgba(255,255,255,0.035);
+      --border:  rgba(255,255,255,0.07);
+      --red:     #c0392b;
+      --orange:  #e67e22;
+      --yellow:  #f1c40f;
+      --cream:   #fdf4e7;
+      --fire:    linear-gradient(135deg,#c0392b 0%,#e8621a 45%,#f1c40f 100%);
+      --fire-text-grad: linear-gradient(90deg,#e8621a 0%,#f1c40f 100%);
+      --radius:  20px;
+    }
+
+    /* ── Gradient text ──────────────────────────────────── */
+    .fire-text {
+      background: var(--fire-text-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Section label pill ─────────────────────────────── */
+    .sec-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #f1a34a;
+      background: rgba(230,126,34,0.12);
+      border: 1px solid rgba(230,126,34,0.28);
+      padding: 6px 15px;
+      border-radius: 100px;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       BUTTONS
+       ══════════════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      white-space: nowrap;
+      text-decoration: none;
+      border: none;
+      font-family: inherit;
+    }
+    .btn-fire {
+      background: var(--fire);
+      color: #fff;
+      padding: 14px 28px;
+      box-shadow: 0 0 36px rgba(230,98,26,0.4);
+    }
+    .btn-fire:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 56px rgba(230,98,26,0.65);
+    }
+    .btn-outline {
+      background: rgba(255,255,255,0.06);
+      color: var(--cream);
+      padding: 14px 28px;
+      border: 1.5px solid rgba(253,244,231,0.2);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.11);
+      transform: translateY(-3px);
+    }
+    .btn-sm  { padding: 10px 20px; font-size: 0.85rem; }
+    .btn-lg  { padding: 17px 34px; font-size: 1rem; }
+    .btn-xl  { padding: 20px 40px; font-size: 1.08rem; }
+    .btn-add {
+      background: var(--fire);
+      color: #fff;
+      padding: 10px 18px;
+      font-size: 0.8rem;
+      border-radius: 100px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(230,98,26,0.35);
+      transition: transform 0.18s, box-shadow 0.18s;
+      white-space: nowrap;
+      font-family: inherit;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .btn-add:hover {
+      transform: scale(1.07);
+      box-shadow: 0 0 34px rgba(230,98,26,0.55);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 12px 0;
+      background: rgba(12,10,7,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .logo-img {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+    }
+    .logo-img-sm { height: 44px; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-links a:not(.btn) {
+      color: #b89a7a;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nav-links a:not(.btn):hover { color: #fdf4e7; }
+
+    /* ══════════════════════════════════════════════════════
+       HERO
+       ══════════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0 24px;
+    }
+    .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .fire-glow {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .fg-1 {
+      width: 900px; height: 900px;
+      background: radial-gradient(circle,rgba(192,57,43,0.18) 0%,transparent 70%);
+      top: -200px; left: -200px;
+    }
+    .fg-2 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle,rgba(230,126,34,0.13) 0%,transparent 70%);
+      top: 50%; right: -150px;
+      transform: translateY(-50%);
+    }
+    .fg-3 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle,rgba(241,196,15,0.07) 0%,transparent 70%);
+      bottom: -100px; left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Floating orbs */
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .orb-1 {
+      width:160px; height:160px;
+      background:rgba(192,57,43,0.18);
+      filter:blur(55px);
+      top:10%; left:3%;
+      animation: orb1 4.2s ease-in-out infinite 0s;
+    }
+    .orb-2 {
+      width:90px; height:90px;
+      background:rgba(241,196,15,0.13);
+      filter:blur(36px);
+      top:7%; right:5%;
+      animation: orb2 3.5s ease-in-out infinite 0.8s;
+    }
+    .orb-3 {
+      width:70px; height:70px;
+      background:rgba(230,126,34,0.2);
+      filter:blur(28px);
+      top:54%; left:1%;
+      animation: orb3 5.0s ease-in-out infinite 1.3s;
+    }
+    .orb-4 {
+      width:120px; height:120px;
+      background:rgba(192,57,43,0.14);
+      filter:blur(44px);
+      top:66%; right:3%;
+      animation: orb4 3.8s ease-in-out infinite 0.5s;
+    }
+    .orb-5 {
+      width:55px; height:55px;
+      background:rgba(241,196,15,0.22);
+      filter:blur(22px);
+      top:33%; left:0%;
+      animation: orb5 4.5s ease-in-out infinite 1.0s;
+    }
+    .orb-6 {
+      width:80px; height:80px;
+      background:rgba(230,98,26,0.16);
+      filter:blur(30px);
+      top:24%; right:1%;
+      animation: orb6 3.2s ease-in-out infinite 1.6s;
+    }
+    @keyframes orb1 { 0%,100%{transform:translate(0,0)}    50%{transform:translate(7px,-28px)}  }
+    @keyframes orb2 { 0%,100%{transform:translate(0,0)}    50%{transform:translate(4.5px,-18px)}}
+    @keyframes orb3 { 0%,100%{transform:translate(0,0)}    50%{transform:translate(8px,-32px)}  }
+    @keyframes orb4 { 0%,100%{transform:translate(0,0)}    50%{transform:translate(5.5px,-22px)}}
+    @keyframes orb5 { 0%,100%{transform:translate(0,0)}    50%{transform:translate(6px,-24px)}  }
+    @keyframes orb6 { 0%,100%{transform:translate(0,0)}    50%{transform:translate(4.5px,-18px)}}
+
+    /* Hero layout */
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1240px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+      padding: 130px 0 90px;
+    }
+    .hero-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+    }
+
+    /* Badge */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #f1a34a;
+      background: rgba(230,126,34,0.1);
+      border: 1px solid rgba(230,126,34,0.3);
+      padding: 8px 18px;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1.1s cubic-bezier(0.22,1,0.36,1) 0s both;
+    }
+    .badge-pulse {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #e8621a;
+      box-shadow: 0 0 10px #e8621a;
+      animation: bpulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes bpulse {
+      0%,100%{ opacity:1; transform:scale(1); }
+      50%    { opacity:0.5; transform:scale(0.8); }
+    }
+
+    .hero h1 {
+      margin-bottom: 1.4rem;
+      animation: fadeInUp 1.1s cubic-bezier(0.22,1,0.36,1) 0.11s both;
+    }
+    .hero-sub {
+      font-size: clamp(1rem,2vw,1.2rem);
+      color: #b89a7a;
+      max-width: 520px;
+      margin-bottom: 2.4rem;
+      line-height: 1.7;
+      animation: fadeInUp 1.1s cubic-bezier(0.22,1,0.36,1) 0.22s both;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 3.2rem;
+      flex-wrap: wrap;
+      animation: fadeInUp 1.1s cubic-bezier(0.22,1,0.36,1) 0.33s both;
+    }
+
+    /* Stats */
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 18px 32px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      flex-wrap: wrap;
+      animation: fadeInUp 1.1s cubic-bezier(0.22,1,0.36,1) 0.44s both;
+    }
+    .hs {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .hs strong {
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      background: var(--fire-text-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hs span {
+      font-size: 0.72rem;
+      color: #7a6048;
+      white-space: nowrap;
+    }
+    .hs-sep {
+      width: 1px; height: 34px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Hero burger visual */
+    .hero-burger-wrap {
+      flex: 0 0 500px;
+      height: 500px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: heroEnter 1.4s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+    }
+    @keyframes heroEnter {
+      from { opacity:0; transform:scale(0.6) translateY(60px); }
+      to   { opacity:1; transform:scale(1)   translateY(0); }
+    }
+
+    .burger-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 50%;
+      border: 1px solid;
+      pointer-events: none;
+    }
+    .burger-ring-1 {
+      width:440px; height:440px;
+      border-color:rgba(230,98,26,0.15);
+      animation: ringBreath 5s ease-in-out infinite;
+    }
+    .burger-ring-2 {
+      width:340px; height:340px;
+      border-color:rgba(241,196,15,0.12);
+      animation: ringBreath 5s ease-in-out 1s infinite;
+    }
+    .burger-ring-3 {
+      width:240px; height:240px;
+      border-color:rgba(192,57,43,0.09);
+      animation: ringBreath 5s ease-in-out 2s infinite;
+    }
+    @keyframes ringBreath {
+      0%,100%{ opacity:0.5; transform:translate(-50%,-50%) scale(1);    }
+      50%    { opacity:1;   transform:translate(-50%,-50%) scale(1.05); }
+    }
+
+    .burger-center-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle,rgba(200,90,20,0.32) 0%,transparent 68%);
+      pointer-events: none;
+      filter: blur(20px);
+      z-index: 1;
+    }
+
+    .burger-parallax {
+      position: relative;
+      z-index: 2;
+      transition: transform 0.12s ease-out;
+      will-change: transform;
+    }
+
+    .hero-burger-img {
+      width: clamp(280px,34vw,440px);
+      height: auto;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 28px 64px rgba(0,0,0,0.85));
+      animation: floatBurger 5.5s ease-in-out infinite;
+    }
+    @keyframes floatBurger {
+      0%,100%{ transform:translateY(0);    }
+      50%    { transform:translateY(-22px); }
+    }
+
+    .burger-floor-shadow {
+      position: absolute;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      width: 280px; height: 30px;
+      background: radial-gradient(ellipse,rgba(0,0,0,0.55) 0%,transparent 70%);
+      border-radius: 50%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      font-size: 1.4rem;
+      color: rgba(184,154,122,0.5);
+      animation: scrollBounce 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%,100%{ transform:translateX(-50%) translateY(0);   opacity:0.5; }
+      50%    { transform:translateX(-50%) translateY(10px); opacity:1;   }
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SCROLL REVEAL
+       ══════════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(32px);
+      transition:
+        opacity   0.9s cubic-bezier(0.22,1,0.36,1),
+        filter    0.9s cubic-bezier(0.22,1,0.36,1),
+        transform 0.9s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SECTIONS
+       ══════════════════════════════════════════════════════ */
+    .section { padding: 100px 24px; }
+
+    .section-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .section-inner h2 { margin-bottom: 1rem; }
+
+    .sec-sub {
+      font-size: 1rem;
+      color: #b89a7a;
+      max-width: 520px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       BURGER CARDS
+       ══════════════════════════════════════════════════════ */
+    .burgers-grid {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 22px;
+      width: 100%;
+    }
+    .burger-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition:
+        transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+    .burger-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      border-color: rgba(230,98,26,0.45);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .bc-visual {
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+      background: linear-gradient(180deg,#0d0a07 0%,#130f09 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .bc-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center 92%,var(--gc,rgba(230,98,26,0.28)) 0%,transparent 62%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bc-img {
+      max-width: calc(100% - 8px);
+      max-height: calc(100% - 8px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 14px 36px rgba(0,0,0,0.9));
+      transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .burger-card:hover .bc-img { transform: scale(1.1); }
+    .burger-tag {
+      position: absolute;
+      top: 12px; left: 12px;
+      z-index: 3;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #f1a34a;
+      background: rgba(12,10,7,0.75);
+      border: 1px solid rgba(230,98,26,0.35);
+      padding: 4px 11px;
+      border-radius: 100px;
+      backdrop-filter: blur(6px);
+    }
+    .bc-info {
+      padding: 18px 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      text-align: left;
+    }
+    .bc-info h3 { color: #fdf4e7; font-size: 1.02rem; }
+    .bc-info p  { font-size: 0.82rem; line-height: 1.55; color: #9a7d5e; }
+    .bc-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .bc-price {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: var(--fire-text-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       COMBO SPOTLIGHT
+       ══════════════════════════════════════════════════════ */
+    .combo-section {
+      background:
+        radial-gradient(ellipse at 75% center,rgba(230,98,26,0.1) 0%,transparent 55%),
+        var(--coal);
+    }
+    .combo-spotlight {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 80px;
+      padding: 0 28px;
+    }
+    .combo-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .combo-text .sec-label { margin-bottom: 1.2rem; }
+    .combo-text h2 { text-align: left; margin-bottom: 1.2rem; }
+    .combo-desc {
+      font-size: 1rem;
+      color: #b89a7a;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+    .combo-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .combo-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.87rem;
+      color: #b89a7a;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.028);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .combo-list li:hover {
+      background: rgba(255,255,255,0.048);
+      border-color: rgba(230,98,26,0.2);
+    }
+    .combo-list li strong {
+      margin-left: auto;
+      font-size: 0.98rem;
+      font-weight: 900;
+      background: var(--fire-text-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .combo-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(230,126,34,0.6);
+    }
+    .combo-dot-hot {
+      background: var(--red);
+      box-shadow: 0 0 10px rgba(192,57,43,0.7);
+    }
+    .combo-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .combo-img-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .combo-glow {
+      position: absolute;
+      inset: -60px;
+      border-radius: 50%;
+      background: radial-gradient(circle,rgba(230,98,26,0.38) 0%,transparent 60%);
+      filter: blur(24px);
+      pointer-events: none;
+    }
+    .combo-img {
+      width: clamp(260px,34vw,480px);
+      height: auto;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 24px 60px rgba(0,0,0,0.85));
+      cursor: pointer;
+      animation: floatCombo 5s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .combo-img:hover { transform: scale(1.05); }
+    @keyframes floatCombo {
+      0%,100%{ transform:translateY(0);    }
+      50%    { transform:translateY(-18px); }
+    }
+    .combo-img:hover { animation-play-state: paused; transform: scale(1.05); }
+
+    /* ══════════════════════════════════════════════════════
+       TESTIMONIALS
+       ══════════════════════════════════════════════════════ */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 22px;
+      width: 100%;
+    }
+    .t-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+      transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .t-card:hover {
+      border-color: rgba(230,98,26,0.3);
+      transform: translateY(-6px);
+    }
+    .t-stars { color: #f1c40f; font-size: 1rem; letter-spacing: 3px; }
+    .t-text  { font-size: 0.88rem; line-height: 1.75; color: #b89a7a; flex: 1; }
+    .t-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .t-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--fire);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .t-info { display: flex; flex-direction: column; gap: 2px; }
+    .t-info strong { font-size: 0.875rem; font-weight: 700; color: #fdf4e7; }
+    .t-info span   { font-size: 0.78rem; color: #7a6048; }
+
+    /* ══════════════════════════════════════════════════════
+       FINAL CTA
+       ══════════════════════════════════════════════════════ */
+    .cta-section {
+      position: relative;
+      padding: 120px 24px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .cta-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .cta-glow { position: absolute; border-radius: 50%; }
+    .cta-g1 {
+      width: 800px; height: 800px;
+      background: radial-gradient(circle,rgba(192,57,43,0.22) 0%,transparent 65%);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .cta-g2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle,rgba(241,196,15,0.1) 0%,transparent 65%);
+      top: 30%; left: 60%;
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 740px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cta-inner h2 { font-size: clamp(2rem,5.5vw,3.6rem); margin-bottom: 1.2rem; }
+    .cta-inner p  { font-size: 1.05rem; max-width: 460px; margin-bottom: 2.8rem; }
+    .cta-btns {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--coal);
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 48px 28px 32px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: start;
+      gap: 40px;
+    }
+    .footer-brand p { font-size: 0.85rem; color: #7a6048; margin-top: 12px; }
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .footer-nav a { font-size: 0.875rem; color: #9a7d5e; font-weight: 500; transition: color 0.2s; }
+    .footer-nav a:hover { color: #fdf4e7; }
+    .footer-contact { text-align: right; }
+    .footer-contact p { font-size: 0.875rem; color: #9a7d5e; margin-bottom: 4px; }
+    .footer-bottom { border-top: 1px solid var(--border); padding: 18px 28px; text-align: center; }
+    .footer-bottom p { font-size: 0.8rem; color: #5a4630; }
+
+    /* ══════════════════════════════════════════════════════
+       KEYFRAMES — shared
+       ══════════════════════════════════════════════════════ */
+    @keyframes fadeInUp {
+      from { opacity:0; filter:blur(8px); transform:translateY(32px); }
+      to   { opacity:1; filter:blur(0);   transform:translateY(0);    }
+    }
+
+    /* ══════════════════════════════════════════════════════
+       RESPONSIVE
+       ══════════════════════════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .hero-inner {
+        flex-direction: column;
+        text-align: center;
+        padding: 120px 0 60px;
+        gap: 40px;
+      }
+      .hero-text { align-items: center; }
+      .hero-sub  { text-align: center; }
+      .hero-btns { justify-content: center; }
+      .hero-burger-wrap { flex: unset; width: 380px; height: 380px; }
+      .burger-ring-1 { width:360px; height:360px; }
+      .burger-ring-2 { width:280px; height:280px; }
+      .burger-ring-3 { width:200px; height:200px; }
+      .burgers-grid  { grid-template-columns: repeat(2,1fr); }
+      .combo-spotlight { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+      .combo-text { align-items: center; }
+      .combo-text h2 { text-align: center; }
+      .combo-desc { text-align: center; }
+      .combo-list li { text-align: left; }
+      .footer-inner  { grid-template-columns: 1fr; text-align: center; }
+      .footer-contact { text-align: center; }
+    }
+    @media (max-width: 768px) {
+      .nav-links a:not(.btn) { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .hero-stats { padding: 16px 20px; gap: 16px; border-radius: 18px; }
+      .hs-sep     { width: 32px; height: 1px; }
+      .section    { padding: 72px 20px; }
+      .cta-section { padding: 88px 20px; }
+    }
+    @media (max-width: 600px) {
+      .burgers-grid { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: stretch; max-width: 290px; }
+      .cta-btns  { flex-direction: column; align-items: stretch; max-width: 290px; }
+      .hero-burger-wrap { width:300px; height:300px; }
+      .burger-ring-1 { width:280px; height:280px; }
+      .burger-ring-2 { width:210px; height:210px; }
+      .burger-ring-3 { width:150px; height:150px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="logo">
+        <img src="logo-brasa-burger.png" alt="Brasa Burger" class="logo-img" />
+      </a>
+      <div class="nav-links">
+        <a href="#menu">Menú</a>
+        <a href="#combo">Combos</a>
+        <a href="#opiniones">Opiniones</a>
+        <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+           target="_blank" rel="noopener noreferrer" class="btn btn-fire btn-sm">
+          Pedir ahora
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+
+    <!-- Fire background glows -->
+    <div class="hero-bg" aria-hidden="true">
+      <div class="fire-glow fg-1"></div>
+      <div class="fire-glow fg-2"></div>
+      <div class="fire-glow fg-3"></div>
+    </div>
+
+    <!-- Floating decorative orbs -->
+    <div class="floating-orb orb-1" aria-hidden="true"></div>
+    <div class="floating-orb orb-2" aria-hidden="true"></div>
+    <div class="floating-orb orb-3" aria-hidden="true"></div>
+    <div class="floating-orb orb-4" aria-hidden="true"></div>
+    <div class="floating-orb orb-5" aria-hidden="true"></div>
+    <div class="floating-orb orb-6" aria-hidden="true"></div>
+
+    <!-- Hero inner -->
+    <div class="hero-inner">
+
+      <!-- Text column -->
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="badge-pulse"></span>
+          Bogotá, Colombia
+        </div>
+
+        <h1>
+          Hamburguesas que<br />
+          <span class="fire-text">prenden el antojo.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Carne jugosa a la brasa, pan artesanal, queso fundido y salsas de
+          la casa en cada mordida.
+        </p>
+
+        <div class="hero-btns">
+          <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+             target="_blank" rel="noopener noreferrer" class="btn btn-fire btn-lg">
+            Pedir por WhatsApp
+          </a>
+          <a href="#menu" class="btn btn-outline btn-lg">Ver menú</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hs">
+            <strong>+5.000</strong>
+            <span>burgers al mes</span>
+          </div>
+          <div class="hs-sep"></div>
+          <div class="hs">
+            <strong>4.9 ★</strong>
+            <span>calificación</span>
+          </div>
+          <div class="hs-sep"></div>
+          <div class="hs">
+            <strong>30 min</strong>
+            <span>delivery</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Burger visual -->
+      <div class="hero-burger-wrap">
+        <div class="burger-ring burger-ring-1"></div>
+        <div class="burger-ring burger-ring-2"></div>
+        <div class="burger-ring burger-ring-3"></div>
+        <div class="burger-center-glow"></div>
+
+        <div class="burger-parallax" id="burgerParallax">
+          <img
+            src="hero-burger.png"
+            alt="Brasa Burger"
+            class="hero-burger-img"
+          />
+        </div>
+
+        <div class="burger-floor-shadow"></div>
+      </div>
+
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">↓</div>
+  </section>
+
+  <!-- ══ MENU ════════════════════════════════════════════ -->
+  <section class="section" id="menu">
+    <div class="section-inner">
+      <div class="sec-label reveal" style="transition-delay:0s">Nuestro Menú</div>
+      <h2 class="reveal" style="transition-delay:0.11s">Las burgers más brutales</h2>
+      <p class="sec-sub reveal" style="transition-delay:0.22s">
+        Cada receta perfeccionada al detalle. Carne premium, ingredientes
+        frescos y sazón de la casa.
+      </p>
+
+      <div class="burgers-grid">
+
+        <!-- La Brasa Clásica -->
+        <div class="burger-card reveal" style="--gc:rgba(192,57,43,0.55); transition-delay:0.33s">
+          <div class="bc-visual" style="--gc:rgba(192,57,43,0.55)">
+            <div class="bc-glow"></div>
+            <img src="brasa-clasica.png" alt="La Brasa Clásica" class="bc-img" />
+            <span class="burger-tag">Favorita</span>
+          </div>
+          <div class="bc-info">
+            <h3>La Brasa Clásica</h3>
+            <p>Carne 100% res a la brasa, lechuga fresca, tomate, cebolla caramelizada y salsa de la casa.</p>
+            <div class="bc-footer">
+              <span class="bc-price">$24.900</span>
+              <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+                 target="_blank" rel="noopener noreferrer" class="btn-add">
+                Agregar al pedido
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doble Queso Fundido -->
+        <div class="burger-card reveal" style="--gc:rgba(241,196,15,0.45); transition-delay:0.44s">
+          <div class="bc-visual" style="--gc:rgba(241,196,15,0.45)">
+            <div class="bc-glow"></div>
+            <img src="doble-queso.png" alt="Doble Queso Fundido" class="bc-img" />
+            <span class="burger-tag">Más pedida</span>
+          </div>
+          <div class="bc-info">
+            <h3>Doble Queso Fundido</h3>
+            <p>Doble carne, doble cheddar fundido, pepinillos, mostaza premium y pan brioche tostado.</p>
+            <div class="bc-footer">
+              <span class="bc-price">$29.900</span>
+              <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+                 target="_blank" rel="noopener noreferrer" class="btn-add">
+                Agregar al pedido
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- BBQ Bacon Smash -->
+        <div class="burger-card reveal" style="--gc:rgba(230,126,34,0.5); transition-delay:0.55s">
+          <div class="bc-visual" style="--gc:rgba(230,126,34,0.5)">
+            <div class="bc-glow"></div>
+            <img src="bbq-bacon.png" alt="BBQ Bacon Smash" class="bc-img" />
+            <span class="burger-tag">Nueva</span>
+          </div>
+          <div class="bc-info">
+            <h3>BBQ Bacon Smash</h3>
+            <p>Smash burger con tocino crocante, cebolla crispy, salsa BBQ ahumada y queso americano.</p>
+            <div class="bc-footer">
+              <span class="bc-price">$32.900</span>
+              <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+                 target="_blank" rel="noopener noreferrer" class="btn-add">
+                Agregar al pedido
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crispy Chicken Deluxe -->
+        <div class="burger-card reveal" style="--gc:rgba(230,176,20,0.45); transition-delay:0.66s">
+          <div class="bc-visual" style="--gc:rgba(230,176,20,0.45)">
+            <div class="bc-glow"></div>
+            <img src="crispy-chicken.png" alt="Crispy Chicken Deluxe" class="bc-img" />
+            <span class="burger-tag">Sin res</span>
+          </div>
+          <div class="bc-info">
+            <h3>Crispy Chicken Deluxe</h3>
+            <p>Pechuga crocante estilo Nashville, coleslaw artesanal, encurtidos y mayonesa picante.</p>
+            <div class="bc-footer">
+              <span class="bc-price">$27.900</span>
+              <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+                 target="_blank" rel="noopener noreferrer" class="btn-add">
+                Agregar al pedido
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ COMBO SPOTLIGHT ══════════════════════════════════ -->
+  <section class="section combo-section" id="combo">
+    <div class="combo-spotlight">
+
+      <!-- Text -->
+      <div class="combo-text reveal" style="transition-delay:0s">
+        <div class="sec-label">Combos</div>
+        <h2>
+          Arma tu<br />
+          <span class="fire-text">combo perfecto</span>
+        </h2>
+        <p class="combo-desc">
+          Burger + papas artesanales + bebida fría. Más sabor, mejor precio.
+          Disponible para llevar y a domicilio.
+        </p>
+
+        <ul class="combo-list">
+          <li>
+            <span class="combo-dot"></span>
+            <span>Combo Clásico — Burger + Papas + Bebida</span>
+            <strong>$34.900</strong>
+          </li>
+          <li>
+            <span class="combo-dot combo-dot-hot"></span>
+            <span>Combo Doble — Doble Burger + Papas grandes + Bebida 500ml</span>
+            <strong>$42.900</strong>
+          </li>
+          <li>
+            <span class="combo-dot"></span>
+            <span>Combo Familiar — 4 Burgers + 2 Papas + 4 Bebidas</span>
+            <strong>$89.900</strong>
+          </li>
+        </ul>
+
+        <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+           target="_blank" rel="noopener noreferrer" class="btn btn-fire btn-lg">
+          Pedir mi combo
+        </a>
+      </div>
+
+      <!-- Image -->
+      <div class="combo-visual reveal" style="transition-delay:0.11s">
+        <div class="combo-img-wrap">
+          <div class="combo-glow"></div>
+          <img
+            src="combo-brasa-burger.png"
+            alt="Combo Brasa Burger"
+            class="combo-img"
+          />
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ TESTIMONIALS ═════════════════════════════════════ -->
+  <section class="section" id="opiniones">
+    <div class="section-inner">
+      <div class="sec-label reveal" style="transition-delay:0s">Opiniones</div>
+      <h2 class="reveal" style="transition-delay:0.11s">Lo que dicen nuestros clientes</h2>
+
+      <div class="testimonials-grid">
+
+        <div class="t-card reveal" style="transition-delay:0.22s">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">"La BBQ Bacon Smash es lo mejor que he probado en Bogotá. La carne queda perfecta y el pan artesanal hace toda la diferencia."</p>
+          <div class="t-author">
+            <div class="t-avatar">S</div>
+            <div class="t-info">
+              <strong>Sebastián Mora</strong>
+              <span>Bogotá</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="t-card reveal" style="transition-delay:0.33s">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">"Pedí el Combo Familiar para un fin de semana y quedamos todos impresionados. Las papas crocantes y las salsas de la casa son un nivel aparte."</p>
+          <div class="t-author">
+            <div class="t-avatar">V</div>
+            <div class="t-info">
+              <strong>Valentina Cruz</strong>
+              <span>Bogotá</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="t-card reveal" style="transition-delay:0.44s">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">"Delivery súper rápido y la comida llegó caliente. La Crispy Chicken Deluxe es brutal, crujiente por fuera y jugosa por dentro. 100% recomendada."</p>
+          <div class="t-author">
+            <div class="t-avatar">A</div>
+            <div class="t-info">
+              <strong>Andrés Gómez</strong>
+              <span>Bogotá</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FINAL CTA ════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="cta-bg" aria-hidden="true">
+      <div class="cta-glow cta-g1"></div>
+      <div class="cta-glow cta-g2"></div>
+    </div>
+
+    <div class="cta-inner">
+      <h2 class="reveal" style="transition-delay:0s">
+        ¿Listo para probar la burger<br />
+        <span class="fire-text">más brutal de la ciudad?</span>
+      </h2>
+
+      <p class="reveal" style="transition-delay:0.11s">
+        Haz tu pedido ahora y lo tienes en la puerta en 30 minutos.
+      </p>
+
+      <div class="cta-btns reveal" style="transition-delay:0.22s">
+        <a href="https://wa.me/573163947414?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Brasa%20Burger"
+           target="_blank" rel="noopener noreferrer" class="btn btn-fire btn-xl">
+          Pedir ahora
+        </a>
+        <a href="#menu" class="btn btn-outline btn-xl">
+          Ver menú completo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#hero" class="logo">
+          <img src="logo-brasa-burger.png" alt="Brasa Burger" class="logo-img logo-img-sm" />
+        </a>
+        <p>La burger más brutal de Bogotá.</p>
+      </div>
+
+      <nav class="footer-nav">
+        <a href="#menu">Menú</a>
+        <a href="#combo">Combos</a>
+        <a href="#opiniones">Opiniones</a>
+      </nav>
+
+      <div class="footer-contact">
+        <p>+57 316 394 7414</p>
+        <p>Bogotá, Colombia</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Brasa Burger · Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ══ JAVASCRIPT ════════════════════════════════════════ -->
+  <script>
+    /* ── Smooth scroll ────────────────────────────────── */
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ── Scroll reveal (IntersectionObserver) ─────────── */
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '-80px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      revealObserver.observe(el);
+    });
+
+    /* ── Mouse parallax on hero burger ───────────────── */
+    var hero = document.querySelector('.hero');
+    var parallax = document.getElementById('burgerParallax');
+    var curX = 0, curY = 0, targetX = 0, targetY = 0, rafId;
+
+    if (hero && parallax) {
+      hero.addEventListener('mousemove', function(e) {
+        var rect = hero.getBoundingClientRect();
+        targetX = ((e.clientX - rect.left) / rect.width * 2 - 1) * 30;
+        targetY = ((e.clientY - rect.top)  / rect.height * 2 - 1) * 20;
+        if (!rafId) rafId = requestAnimationFrame(lerp);
+      });
+
+      hero.addEventListener('mouseleave', function() {
+        targetX = 0;
+        targetY = 0;
+        if (!rafId) rafId = requestAnimationFrame(lerp);
+      });
+
+      function lerp() {
+        curX += (targetX - curX) * 0.08;
+        curY += (targetY - curY) * 0.08;
+        parallax.style.transform = 'translate(' + curX.toFixed(2) + 'px,' + curY.toFixed(2) + 'px)';
+        if (Math.abs(targetX - curX) > 0.05 || Math.abs(targetY - curY) > 0.05) {
+          rafId = requestAnimationFrame(lerp);
+        } else {
+          rafId = null;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
